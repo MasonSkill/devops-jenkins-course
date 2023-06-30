@@ -22,7 +22,7 @@ Switch to root user
 
 Get install_jenkins_ubuntu.sh file for docker installation and jenkins preparation. The sh file is based on https://docs.docker.com/engine/install/ubuntu/
 
-    wget https://raw.githubusercontent.com/MasonSkill/jenkins-course/mason/scripts/install_jenkins_ubuntu.sh
+    wget https://raw.githubusercontent.com/MasonSkill/devops-jenkins-course/mason/scripts/install_jenkins_ubuntu.sh
 
 Run install_jenkins_ubuntu.sh with with root
 
@@ -46,11 +46,11 @@ Create run time folder like /home/ubuntu/xxx/xxx_devops_runtime
 
 Get docker compose file and rename it
 
-    wget -O docker-compose.yml https://raw.githubusercontent.com/MasonSkill/jenkins-course/mason/docker-compose/docker-compose-ubuntu.yml
+    wget -O docker-compose.yml https://raw.githubusercontent.com/MasonSkill/devops-jenkins-course/mason/docker-compose/docker-compose-ubuntu.yml
 
 Get docker file
 
-    wget https://raw.githubusercontent.com/MasonSkill/jenkins-course/mason/docker-compose/Dockerfile-ubuntu
+    wget https://raw.githubusercontent.com/MasonSkill/devops-jenkins-course/mason/docker-compose/Dockerfile-ubuntu
 
 ## Start Jenksin with docker compose
 
