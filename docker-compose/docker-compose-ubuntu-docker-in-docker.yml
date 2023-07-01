@@ -1,0 +1,23 @@
+version: '3'
+services:
+  jenkins:
+    build:
+      context: .
+      dockerfile: Dockerfile-ubuntu
+    container_name: jenkins
+    # Bellow configuration enables jenksin in container uses docker deamon in host ubuntu
+    user: root  # Add this line
+    privileged: true  # Grant additional privileges to the container
+    networks:
+      - jenkins
+    environment:
+      - DOCKER_HOST=unix:///var/run/docker.sock
+    volumes:
+      - /var/jenkins_home:/var/jenkins_home
+      - /var/run/docker.sock:/var/run/docker.sock
+    ports:
+      - "127.0.0.1:8080:8080"
+      - "127.0.0.1:50000:50000"
+    
+networks:
+  jenkins:
