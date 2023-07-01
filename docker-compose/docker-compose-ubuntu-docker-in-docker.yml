@@ -9,9 +9,8 @@ services:
       - DOCKER_TLS_CERTDIR=/certs
     volumes:
       # - jenkins-data:/var/jenkins_home
-      # - jenkins-docker-certs:/certs/client
-      - /var/jenkins_home/jenkins-data:/var/jenkins_home
-      - /var/jenkins_home/jenkins-docker-certs:/certs/client
+      - /var/jenkins_home:/var/jenkins_home
+      - jenkins-docker-certs:/certs/client
     ports:
       - '2376:2376'
       - '3000:3000'
@@ -20,7 +19,7 @@ services:
   jenkins:
     build:
       context: .
-      dockerfile: Dockerfile
+      dockerfile: Dockerfile-ubuntu
     container_name: jenkins
     networks:
       - jenkins
@@ -31,9 +30,8 @@ services:
       - JAVA_OPTS=-Dhudson.plugins.git.GitSCM.ALLOW_LOCAL_CHECKOUT=true
     volumes:
       # - jenkins-data:/var/jenkins_home
-      # - jenkins-docker-certs:/certs/client:ro
-      - /var/jenkins_home/jenkins-data:/var/jenkins_home
-      - /var/jenkins_home/jenkins-docker-certs:/certs/client:ro
+      - /var/jenkins_home:/var/jenkins_home
+      - jenkins-docker-certs:/certs/client:ro
     ports:
       - '127.0.0.1:8080:8080'
       - '127.0.0.1:50000:50000'
@@ -43,6 +41,6 @@ services:
 networks:
   jenkins:
 
-# volumes:
-#   jenkins-data:
-#   jenkins-docker-certs:
+volumes:
+  # jenkins-data:
+  jenkins-docker-certs:
