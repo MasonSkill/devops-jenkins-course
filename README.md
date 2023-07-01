@@ -44,15 +44,15 @@ or
 
 Create run time folder like /home/ubuntu/xxx/xxx_devops_runtime
 
-**In Jenkins pipeline, use ubunbu docker server as docker runtime**
+**[Docker in docker] [Recommended] In Jenkins pipeline, Use docker container runs in ubunbu docker as docker runtime**
+Get docker compose file and rename it
+
+    wget -O docker-compose.yml https://raw.githubusercontent.com/MasonSkill/devops-jenkins-course/mason/docker-compose/docker-compose-ubuntu-docker-in-docker.yml
+
+**[Docker in host] In Jenkins pipeline, use ubunbu docker server as docker runtime**
 Get docker compose file and rename it
 
     wget -O docker-compose.yml https://raw.githubusercontent.com/MasonSkill/devops-jenkins-course/mason/docker-compose/docker-compose-ubuntu-docker-in-host.yml
-
-**In Jenkins pipeline, Use docker container runs in ubunbu docker as docker runtime**
-Get docker compose file and rename it
-
-    wget -O docker-compose.yml https://raw.githubusercontent.com/MasonSkill/devops-jenkins-course/mason/docker-compose-ubuntu-docker-in-host.yml
 
 Get docker file
 

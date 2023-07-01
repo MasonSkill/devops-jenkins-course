@@ -1,48 +1,23 @@
+version: '3'
 services:
-  jenkins-docker:
-    image: docker:dind
-    container_name: jenkins-docker
-    privileged: true
-    networks:
-      - jenkins
-    environment:
-      - DOCKER_TLS_CERTDIR=/certs
-    volumes:
-      # - jenkins-data:/var/jenkins_home
-      # - jenkins-docker-certs:/certs/client
-      - /var/jenkins_home/jenkins-data:/var/jenkins_home
-      - /var/jenkins_home/jenkins-docker-certs:/certs/client
-    ports:
-      - '2376:2376'
-      - '3000:3000'
-    command: --storage-driver overlay2
-
   jenkins:
     build:
       context: .
-      dockerfile: Dockerfile
+      dockerfile: Dockerfile-ubuntu
     container_name: jenkins
+    # Bellow configuration enables jenksin in container uses docker deamon in host ubuntu
+    user: root  # Add this line
+    privileged: true  # Grant additional privileges to the container
     networks:
       - jenkins
     environment:
-      - DOCKER_HOST=tcp://docker:2376
-      - DOCKER_CERT_PATH=/certs/client
-      - DOCKER_TLS_VERIFY=1
-      - JAVA_OPTS=-Dhudson.plugins.git.GitSCM.ALLOW_LOCAL_CHECKOUT=true
+      - DOCKER_HOST=unix:///var/run/docker.sock
     volumes:
-      # - jenkins-data:/var/jenkins_home
-      # - jenkins-docker-certs:/certs/client:ro
-      - /var/jenkins_home/jenkins-data:/var/jenkins_home
-      - /var/jenkins_home/jenkins-docker-certs:/certs/client:ro
+      - /var/jenkins_home:/var/jenkins_home
+      - /var/run/docker.sock:/var/run/docker.sock
     ports:
-      - '127.0.0.1:8080:8080'
-      - '127.0.0.1:50000:50000'
-    links:
-      - jenkins-docker:docker
-
+      - "127.0.0.1:8080:8080"
+      - "127.0.0.1:50000:50000"
+    
 networks:
   jenkins:
-
-# volumes:
-#   jenkins-data:
-#   jenkins-docker-certs:
