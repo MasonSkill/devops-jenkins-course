@@ -39,6 +39,7 @@ sudo usermod -aG docker ubuntu
 # Run jenkins
 ## This command creates a directory named "jenkins_home" in the "/var" directory. 
 mkdir -p /var/jenkins_home
+mkdir -p /var/jenkins_home/jenkins_data
 
 ## This command changes the ownership of the "/var/jenkins_home" directory and its contents recursively. 
 chown -R 1000:1000 /var/jenkins_home/
