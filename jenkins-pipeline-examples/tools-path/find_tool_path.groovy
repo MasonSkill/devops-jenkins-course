@@ -32,5 +32,6 @@ pipeline {
             }
         }
 
+    // Add more stages for your actual pipeline tasks...
     }
 }

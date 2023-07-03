@@ -12,8 +12,7 @@ services:
       - /var/jenkins_home:/var/jenkins_home
       - jenkins_docker_certs:/certs/client
     ports:
-      - '2376:2376'
-      - '3000:3000'
+      - '127.0.0.1:2376:2376'
     command: --storage-driver overlay2
 
   jenkins:
