@@ -5,6 +5,7 @@ CI/CD with Jenkins using Pipelines and Docker
 This is the course material for the Jenkins Course on Udemy ([Learn DevOps: CI/CD with Jenkins using Pipelines and Docker](https://www.udemy.com/learn-devops-ci-cd-with-jenkins-using-pipelines-and-docker/?couponCode=JENKINS_GIT))
 
 # Bellow are detailed steps updated by Mason
+# Section 1: Install and setup Jenksin in Ubuntu
 ## In AWS, create Ubuntu 22.04 LTS
 Ubuntu Server 22.04 LTS (HVM), SSD Volume Type, 64-bit(x86)
 Canonical, Ubuntu, 22.04 LTS, amd64 jammy image build on 2023-05-16
@@ -115,9 +116,16 @@ Prune all including volumes
 
     docker system prune --all --force --volumes
 
-# Plugins and Tools Configuration in Jenkins
+# Section 2: Plugins and Tools Configuration in Jenkins
+In docker-based Jenksin, some basic runtime tools like are not installed. When we need to them, there are two alternatives.
+'Y' or 'N' means wether it is recommended options
+| Tool Name | Manual Installation | Jenksin Plugin Name | Seperate Docker |
+| - | - |- | - |
+| docker | N | docker - N | image: docker:dind - Y |
+| maven | N | maven - Y | image 'maven:3.9.0-eclipse-temurin-11' - Y |
+| nodejs | N | NodeJS(NodeJS Plugin) - Y | image 'node:18.16.1-alpine3.17' - Y |
 
-## Docker
+## Tool - Docker
 ### Plugin
 Docker Pipeline, Docker Commons Plugin
 
@@ -143,7 +151,7 @@ Docker version: latest
     }
 
 
-## Maven
+## Tool - Maven
 ### Plugin
 N/A
 
@@ -169,7 +177,7 @@ Version: 3.9.3
     }
 
 
-## Nodejs
+## Tool - Nodejs
 ### Plugin
 NodeJS(NodeJS Plugin)
 
@@ -194,7 +202,21 @@ Version: NodeJS 18.16.1
         }
     }
 
-# Jenksin pipeline examples
-There are some pipeline examples under ./jenkins-pipeline-examples/ folder. Some of the pipelines used Tool runtime white others uses the runtime in docker. For example:
-- maven-in-docker.groovy: run maven in docker
-- maven-in-tool.groovy: run maven in jenksin tool
+# Section 3: Jenksin pipeline examples
+There are some pipeline examples under ./jenkins-pipeline-examples/ folder. Some of the pipelines used Tool runtime white others uses the runtime in docker:
+- docker/docker-in-tool.groovy: run docker cli in jenksin tool(not recommended as docker cli is very basic so it is installed in jenksin docker instead)
+- email-notification/send-email.groovy: Configure email send email to jenksin admin. 
+    - Register an email in https://mailtrap.io which support email sandbox
+    - Install 'Email Extension Plugin' plugin under 'Dashboard > Manage Jenkins > Plugins' in Jenkins portal.
+    - Go to 'Dashboard > Manage Jenkins > Credentials > System > Extended E-mail Notification'
+    - Configure 
+        - SMTP server: sandbox.smtp.mailtrap.io
+        - SMTP Port: 2525
+        - Credentials: create a credential with the username and password from mailtrap.
+    - Run send-email.groovy pipeline in Jenkins
+    - Go to mailtrap 'Email Testing > inboxes' to check the email. e.g. 'send-email - Build #8 SUCCESS'
+- maven/maven-in-docker.groovy: run maven in docker
+- maven/maven-in-tool.groovy: run maven in jenksin tool
+- node/node-in-docker.groovy: run node in docker
+- node/node-in-tool.groovy: run node in jenksin tool
+- tools-path/find_tool_path.groovy: find tools installation path 
