@@ -117,8 +117,10 @@ Prune all including volumes
     docker system prune --all --force --volumes
 
 # Section 2: Plugins and Tools Configuration in Jenkins
-In docker-based Jenksin, some basic runtime tools like are not installed. When we need to them, there are two alternatives.
-'Y' or 'N' means wether it is recommended options
+In docker-based Jenksin, some basic runtime tools like are not installed. 
+
+When we need to them, there are two alternatives.
+'Y' or 'N' means wether it is recommended option
 | Tool Name | Manual Installation | Jenksin Plugin Name | Seperate Docker |
 | - | - |- | - |
 | docker | N | docker - N | image: docker:dind - Y |
@@ -204,8 +206,12 @@ Version: NodeJS 18.16.1
 
 # Section 3: Jenksin pipeline examples
 There are some pipeline examples under ./jenkins-pipeline-examples/ folder. Some of the pipelines used Tool runtime white others uses the runtime in docker:
+
+## Docker examples
 - docker/docker-in-tool.groovy: run docker cli in jenksin tool(not recommended as docker cli is very basic so it is installed in jenksin docker instead)
-- email-notification/send-email.groovy: Configure email send email to jenksin admin. 
+
+## Email Notification examples
+- email-notification/send-email.groovy: Send email
     - Register an email in https://mailtrap.io which support email sandbox
     - Install 'Email Extension Plugin' plugin under 'Dashboard > Manage Jenkins > Plugins' in Jenkins portal.
     - Go to 'Dashboard > Manage Jenkins > Credentials > System > Extended E-mail Notification'
@@ -215,8 +221,20 @@ There are some pipeline examples under ./jenkins-pipeline-examples/ folder. Some
         - Credentials: create a credential with the username and password from mailtrap.
     - Run send-email.groovy pipeline in Jenkins
     - Go to mailtrap 'Email Testing > inboxes' to check the email. e.g. 'send-email - Build #8 SUCCESS'
+- email-notification/send-email-with-test-fail: Send email for a failed build
+
+### Email plugin comparision: [Mailer](https://plugins.jenkins.io/mailer/) vs. [Email Extension](https://plugins.jenkins.io/email-ext/)
+Though mailer plugging is good for sending the basic alerts from Jenkins it does not provide advanced functionality like sending an attachment or sending a build log over email. There is another advanced plugging available in Jenkins which is called the Email Extension Plugin...
+
+Refer to [Jenkins pipeline email notification | How to send email in 2022](https://naiveskill.com/jenkins-pipeline-email-notification/)
+
+## Maven examples
 - maven/maven-in-docker.groovy: run maven in docker
 - maven/maven-in-tool.groovy: run maven in jenksin tool
+
+## Node examples
 - node/node-in-docker.groovy: run node in docker
 - node/node-in-tool.groovy: run node in jenksin tool
+
+## Other examples
 - tools-path/find_tool_path.groovy: find tools installation path 
