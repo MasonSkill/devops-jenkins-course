@@ -3,7 +3,7 @@ services:
   jenkins:
     build:
       context: .
-      dockerfile: Dockerfile-ubuntu
+      dockerfile: Dockerfile-jenkins
     container_name: jenkins
     # Bellow configuration enables jenksin in container uses docker deamon in host ubuntu
     user: root  # Add this line

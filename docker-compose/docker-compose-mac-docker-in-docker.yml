@@ -8,8 +8,8 @@ services:
     environment:
       - DOCKER_TLS_CERTDIR=/certs
     volumes:
-      # - jenkins_home:/var/jenkins_home
-      - /var/jenkins_home:/var/jenkins_home
+      - jenkins_home:/var/jenkins_home
+      # - /var/jenkins_home:/var/jenkins_home
       - jenkins_docker_certs:/certs/client
     ports:
       - '127.0.0.1:2376:2376'
@@ -28,8 +28,8 @@ services:
       - DOCKER_TLS_VERIFY=1
       - JAVA_OPTS=-Dhudson.plugins.git.GitSCM.ALLOW_LOCAL_CHECKOUT=true
     volumes:
-      # - jenkins_home:/var/jenkins_home
-      - /var/jenkins_home:/var/jenkins_home
+      - jenkins_home:/var/jenkins_home
+      # - /var/jenkins_home:/var/jenkins_home
       - jenkins_docker_certs:/certs/client:ro
     ports:
       - '127.0.0.1:8080:8080'
@@ -49,13 +49,13 @@ services:
       - '127.0.0.1:8049:8049'
       - '127.0.0.1:8070:8070'
     volumes:
-      # - jfrog_home:/var/opt/jfrog/artifactory
-      - /var/jfrog_home:/var/opt/jfrog/artifactory
+      - jfrog_home:/var/opt/jfrog/artifactory
+      # - /var/jfrog_home:/var/opt/jfrog/artifactory
 
 networks:
   jenkins:
 
 volumes:
-  # jenkins_home:
-  # jfrog_home:
+  jenkins_home:
+  jfrog_home:
   jenkins_docker_certs:

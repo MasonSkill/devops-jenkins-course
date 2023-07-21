@@ -37,15 +37,10 @@ sudo systemctl start docker
 sudo usermod -aG docker ubuntu
 
 # Run jenkins
-## This command creates a directory named "jenkins_home" in the "/var" directory. 
+## This command creates a directory named "jenkins_home" and "jfrog_home" in the "/var" directory. 
 mkdir -p /var/jenkins_home
+mkdir -p /var/jfrog_home
 
-## This command changes the ownership of the "/var/jenkins_home" directory and its contents recursively. 
+## This command changes the ownership of the "/var/jenkins_home" and "/var/jfrog_home" directory and its contents recursively. 
 chown -R 1000:1000 /var/jenkins_home/
-
-## Run jenksin from docker command
-# docker run -p 8080:8080 -p 50000:50000 -v /var/jenkins_home:/var/jenkins_home -d --name jenkins jenkins/jenkins:lts
-
-# show endpoint
-# echo 'Jenkins installed'
-# echo 'You should now be able to access jenkins at: http://'$(curl -4 -s ifconfig.co)':8080'
+chown -R 1030:1030 /var/jfrog_home/
