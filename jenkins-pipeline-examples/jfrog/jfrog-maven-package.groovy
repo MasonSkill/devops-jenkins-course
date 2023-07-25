@@ -35,16 +35,23 @@ pipeline {
                 }
             }
         }
+
         stage('Publish build output to JFrog') {
             steps {
                 dir("${RUNTIME_DIR}") {
-                    // Upload Jar files to to JFrog Artifactory, so that it can be downloaded in JFrog build page
-                    jf 'rt u target/*.jar my-local-repo/jarFiles/'
+                    script {
+                        // Set the target path including pipeline name and build number
+                        def targetPath = "my-local-repo/${JOB_NAME}/${BUILD_NUMBER}/"
 
-                    // Publish build info to JFrog Artifactory
-                    jf 'rt build-publish'
+                        // Upload Jar files to JFrog Artifactory
+                        jf "rt u target/*.jar ${targetPath}"
+
+                        // Publish build info to JFrog Artifactory
+                        jf 'rt build-publish'
+                    }
                 }
             }
         }
+        
     }
 }
