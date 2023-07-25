@@ -5,7 +5,7 @@ CI/CD with Jenkins using Pipelines and Docker
 This is the course material for the Jenkins Course on Udemy ([Learn DevOps: CI/CD with Jenkins using Pipelines and Docker](https://www.udemy.com/learn-devops-ci-cd-with-jenkins-using-pipelines-and-docker/?couponCode=JENKINS_GIT))
 
 # Bellow are detailed steps updated by Mason
-# Section 1: Install and setup Jenkins in Ubuntu
+# Topic 1: Install and setup Jenkins in Ubuntu
 ## Create Ubuntu Instance in AWS
 Ubuntu Server 22.04 LTS (HVM), SSD Volume Type, 64-bit(x86)
 Canonical, Ubuntu, 22.04 LTS, amd64 jammy image build on 2023-05-16
@@ -61,7 +61,7 @@ Download docker compose file and rename it
 
     wget https://raw.githubusercontent.com/MasonSkill/devops-jenkins-course/mason/docker-compose/Dockerfile-jenkins
 
-# Section 2: Run Jenkins with docker compose
+# Topic 2: Run Jenkins with docker compose
 
 There are two services related with jenkins:
 - One is 'docker' service which runs in a container and controled by jenksin pipeline.
@@ -125,7 +125,7 @@ Prune all including volumes
 
     docker system prune --all --force --volumes
 
-# Section 3: Jenkins Plugins and Tools Configuration
+# Topic 3: Jenkins Plugins and Tools Configuration
 
 ## Docker Pipeline plugin
 The plugin is used to run docker in pipeline
@@ -224,7 +224,7 @@ Version: NodeJS 18.16.1
         }
     }
 
-# Section 4: Run JFrog with docker compose
+# Topic 4: Run JFrog with docker compose
 
 ## Start jfrog service 
 
@@ -263,7 +263,7 @@ Local - [http://127.0.0.1:8082](http://127.0.0.1:8082)
 
 By now, jfrog is ready to use
 
-# Section 5: JFrog and Jenkins integration
+# Topic 5: JFrog and Jenkins integration
 ## Install JFrog plugin in Jenkins
 The official website for JFrog plugin
 [https://github.com/jfrog/jenkins-jfrog-plugin#readme](https://github.com/jfrog/jenkins-jfrog-plugin#readme)
@@ -273,10 +273,17 @@ JFrog Plugin
 ### Plugin Configuration
 Refer to [https://github.com/jfrog/jenkins-jfrog-plugin#installing-and-configuring-the-plugin](https://github.com/jfrog/jenkins-jfrog-plugin#installing-and-configuring-the-plugin)
 
-Server ID: jfrog-instance
-Remote - JFrog Platform URL: https://jfrog.your_domain.com
-Local - JFrog Platform URL: http://jfrog:8082 (Jenkins and JFrog are in seperate container, so Jenkins access JFrog service through http://jfrog:8082 rather than http://127.0.0.1:8082)
-Credentials: the JFrog user/password (Use JFrog admin user for test, but create a deploy user with deployment access in staging and production env.)
+Server ID: `jfrog-instance`
+
+Remote - JFrog Platform URL: `https://jfrog.your_domain.com`
+
+Local - JFrog Platform URL: `http://jfrog:8082` (Jenkins and JFrog are in seperate container, so Jenkins access JFrog service through http://jfrog:8082 rather than http://127.0.0.1:8082)
+
+Credentials: the JFrog `user/password` (Use JFrog admin user for test, but create a deploy user with deployment access in staging and production env.)
+
+Advanced Configuration
+JFrog Artifactory URL: `http://jfrog:8082/artifactory` (in Remote mode, upload to artifactory using internal network rather than public network. DNS proxy does not allow too large file upload through public network)
+Allow HTTP Connections: `Checked`
 
 ### Tool Configuration
 Refer to [https://github.com/jfrog/jenkins-jfrog-plugin#configuring-jfrog-cli-as-a-tool](https://github.com/jfrog/jenkins-jfrog-plugin#configuring-jfrog-cli-as-a-tool)
@@ -300,7 +307,64 @@ Run [jenkins-pipeline-examples/jfrog/jfrog-maven.groovy](./jenkins-pipeline-exam
 3. Publish the output to JFrog artifactory
 4. Go to JFrog `Artifactory/Builds/jfrog-maven-package/<build_number>` to check the jar output
 
-# Section 6: Jenkins pipeline examples
+# Topic 6: Github SSH configuration
+We are going to create a SSH key in Jenkins container, then configure them in Jenksin and Github.
+
+Note: If you have only one Jenkins node and you want a simpler setup, it can be reasonable to put the SSH key directly inside the Jenkins Docker container. 
+
+Refer to [Setup SSH between Jenkins and Github](https://levelup.gitconnected.com/setup-ssh-between-jenkins-and-github-e4d7d226b271)
+
+## Create SSH key
+1. Connect to Jenkins container with root user
+
+Connect to Jenkins with normal user
+
+    docker exec -it jenkins /bin/bash
+
+
+
+2. Generate SSH Key
+
+Generate SSH Key
+
+    mkdir ~/.ssh
+
+    cd ~/.ssh
+
+    ssh-keygen -t rsa -b 4096 -C "your_email_address"
+
+
+3. View Private Key
+
+View Private Key
+
+    cat id_rsa.pub 
+
+Then copy it
+
+4. ADD ECDSA key finderprint
+You have to go to some temp folder in Jenkins container then run
+
+    git clone "your private github"
+
+Then it will ask you to add ECDSA key fingerprint
+
+### Configure in Github
+Copy the content and add new SSH Key in github
+
+Title: ssh-jenkins
+Key type: Authentication Key
+Key: `<The content copied from id_rsa.pub>`
+
+## Configure in Jenkins
+Create a new Git SSH credential when try to configure Git in SCM pipeline
+
+ID: my-github
+Username: git email
+Private Key: `<The content copied from id_rsa>` - Note it is a private key the content from id_rsa not id_rsa.pub
+
+
+# Topic 7: Jenkins pipeline examples
 There are some pipeline examples under ./jenkins-pipeline-examples/ folder. Some of the pipelines used Tool runtime white others uses the runtime in docker:
 
 ## Docker examples
