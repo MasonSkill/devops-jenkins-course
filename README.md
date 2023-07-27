@@ -100,10 +100,6 @@ Connect to Jenkins with normal user
 
     docker exec -it jenkins /bin/bash
 
-OR Connect to Jenkins with root user
-    
-    docker exec -u 0 -it jenkins /bin/bash
-
 Check docker cli
 
     docker -v
@@ -321,8 +317,6 @@ Connect to Jenkins with normal user
 
     docker exec -it jenkins /bin/bash
 
-
-
 2. Generate SSH Key
 
 Generate SSH Key
@@ -331,8 +325,7 @@ Generate SSH Key
 
     cd ~/.ssh
 
-    ssh-keygen -t rsa -b 4096 -C "your_email_address"
-
+    ssh-keygen -t rsa -b 4096 -C "your_email@example.com"
 
 3. View Private Key
 
@@ -349,7 +342,23 @@ You have to go to some temp folder in Jenkins container then run
 
 Then it will ask you to add ECDSA key fingerprint
 
-### Configure in Github
+### Note:
+It is not necessary to generate SSH key in Jenkins server. In this case, you'll need to do
+- Create SSH credential as bellow
+- For SCM mode, specify SSH credential
+- For clone code in pipeline, do credential configuration
+```
+stage('Clone') {
+    agent any
+    steps {
+        git branch: 'dev',
+        credentialsId: 'my-git-credential',
+        url: 'git@github.com:your_private_repository.git'
+    }
+}
+```
+
+## Configure in Github
 Copy the content and add new SSH Key in github
 
 Title: ssh-jenkins
@@ -362,7 +371,6 @@ Create a new Git SSH credential when try to configure Git in SCM pipeline
 ID: my-github
 Username: git email
 Private Key: `<The content copied from id_rsa>` - Note it is a private key the content from id_rsa not id_rsa.pub
-
 
 # Topic 7: Jenkins pipeline examples
 There are some pipeline examples under ./jenkins-pipeline-examples/ folder. Some of the pipelines used Tool runtime white others uses the runtime in docker:
@@ -402,4 +410,58 @@ Refer to [Jenkins pipeline email notification | How to send email in 2022](https
 - [jenkins-pipeline-examples/jfrog/jfrog-maven-package.groovy](jenkins-pipeline-examples/jfrog/jfrog-maven-package.groovy): run maven project and publish jar files in JFrog repository
 
 ## Other examples
-- [jenkins-pipeline-examples/tools-path/find_tool_path.groovy](jenkins-pipeline-examples/tools-path/find_tool_path.groovy): find tools installation path 
+- [jenkins-pipeline-examples/tools-path/find_tool_path.groovy](jenkins-pipeline-examples/tools-path/find_tool_path.groovy): find tools installation path
+
+# Topic 8: Container Connection
+## Docker Container
+Connect to Docker (root as default)
+
+    docker exec -it docker sh
+
+## Jenkins Container
+Connect to Jenkins with normal user
+
+    docker exec -it jenkins /bin/bash
+
+OR
+
+    docker exec -it jenkins bash
+
+OR Connect to Jenkins with root user
+    
+    docker exec -u 0 -it jenkins /bin/bash
+
+OR
+
+    docker exec -u 0 -it jenkins bash
+
+## Jenkins ssh-agent Container
+Connect to Jenkins ssh-agent (root as default)
+
+    docker exec -it ssh-agent bash
+
+## JFrog Container
+Connect to JFrog with normal user
+
+    docker exec -it jfrog bash
+
+OR Connect to JFrog with root user
+    
+    docker exec -u 0 -it jfrog bash
+
+
+# Topic 9: Add to known_host in Jenkins container
+
+To fix "Host key verification failed" or "No ECDSA host key is known for github.com" issue
+
+Add EC2 connection to known_hosts
+
+    ssh-keyscan remote_ip >> ~/.ssh/known_hosts
+
+Add EC2 connection to known_hosts
+
+    ssh-keyscan internal_ip >> ~/.ssh/known_hosts
+
+Add Github to known_hosts
+
+    ssh-keyscan github.com >> ~/.ssh/known_hosts
