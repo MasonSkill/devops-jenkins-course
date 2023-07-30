@@ -435,11 +435,6 @@ OR
 
     docker exec -u 0 -it jenkins bash
 
-## Jenkins ssh-agent Container
-Connect to Jenkins ssh-agent (root as default)
-
-    docker exec -it ssh-agent bash
-
 ## JFrog Container
 Connect to JFrog with normal user
 
