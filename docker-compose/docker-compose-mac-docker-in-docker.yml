@@ -14,6 +14,7 @@ services:
     ports:
       - '127.0.0.1:2376:2376'
     command: --storage-driver overlay2
+    restart: "unless-stopped"
 
   jenkins:
     build:
@@ -36,6 +37,7 @@ services:
       - '127.0.0.1:50000:50000'
     links:
       - docker:docker
+    restart: "unless-stopped"
 
   jfrog:
     image: docker.bintray.io/jfrog/artifactory-oss
@@ -51,6 +53,7 @@ services:
     volumes:
       - jfrog_home:/var/opt/jfrog/artifactory
       # - /var/jfrog_home:/var/opt/jfrog/artifactory
+    restart: "unless-stopped"
 
 networks:
   jenkins:
